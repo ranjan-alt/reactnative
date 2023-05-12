@@ -1,5 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+
+import { Button, StyleSheet, Text, TextInput, View, FlatList } from "react-native";
 import { useState } from "react";
 
 export default function App() {
@@ -15,7 +15,7 @@ function addGoalhandler(){
 // console.log(enteredGoalText) we can directly get the value once we click on button but since the data will change we have to make another hook to store the value 
 // setCourseGoals([...courseGoals, enteredGoalText])
 // best practice for this would be 
-setCourseGoals((currentCourseGoals)=>[...currentCourseGoals, enteredGoalText])
+setCourseGoals((currentCourseGoals)=>[...currentCourseGoals, {text:enteredGoalText, key:Math.random().toString()}])
 
 }
 
@@ -26,8 +26,17 @@ setCourseGoals((currentCourseGoals)=>[...currentCourseGoals, enteredGoalText])
       <Button  title="Add Goal" onPress={addGoalhandler}/>
     </View>
     <View style={styles.goalsContainer}>
-      {/* <Text>List of goals....</Text> */}
-      {courseGoals.map((goal)=><Text>{goal}</Text>)}
+      <FlatList  
+      data={courseGoals} 
+      renderItem={(itemData)=>{
+        return(
+       <View style={styles.goalItem}>
+       <Text style={styles.goalText }>{itemData.item.text}</Text>
+       </View>
+        );
+      }}
+      alwaysBounceVertical={false}
+      />
     </View>
    </View>
   );
