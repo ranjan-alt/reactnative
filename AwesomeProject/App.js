@@ -1,17 +1,16 @@
 
-import { Button, StyleSheet, Text, TextInput, View, FlatList } from "react-native";
+import { Button, StyleSheet, Text,View, FlatList } from "react-native";
 import { useState } from "react";
+import GoalInput from "./components/GoalInput";
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
 
-  const [enteredGoalText, setEnteredGoalText] =useState("")
+  
   const [courseGoals, setCourseGoals] =useState([])
 
-function goalInputHandler(enteredText){
-  setEnteredGoalText(enteredText)
-}
 
-function addGoalhandler(){
+function addGoalhandler(enteredGoalText){
 // console.log(enteredGoalText) we can directly get the value once we click on button but since the data will change we have to make another hook to store the value 
 // setCourseGoals([...courseGoals, enteredGoalText])
 // best practice for this would be 
@@ -21,21 +20,20 @@ setCourseGoals((currentCourseGoals)=>[...currentCourseGoals, {text:enteredGoalTe
 
   return (
    <View style={styles.container}>
-    <View style={styles.inputContainer}>
-      <TextInput style={styles.textInput} placeholder="Your Course Goal" onChangeText={goalInputHandler}/>
-      <Button  title="Add Goal" onPress={addGoalhandler}/>
-    </View>
+ <GoalInput addGoalhandler={addGoalhandler}
+ 
+ />
     <View style={styles.goalsContainer}>
       <FlatList  
       data={courseGoals} 
       renderItem={(itemData)=>{
-        return(
-       <View style={styles.goalItem}>
-       <Text style={styles.goalText }>{itemData.item.text}</Text>
-       </View>
-        );
+        return
+        <GoalItem text={itemData.item.text}/>
       }}
       alwaysBounceVertical={false}
+      keyExtractor={(item, index)=>{
+        return item.id
+      }}
       />
     </View>
    </View>
@@ -49,25 +47,9 @@ const styles = StyleSheet.create({
  paddingHorizontal:16
 
   },
-  inputContainer:{
-    flex:1,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center",
-    borderBottomWidth:1,
-    borderBottomColor:"#ccccc",
-    marginBottom:24,
-  },
-  textInput:{
-    borderWidth:1,
-    borderColor:"#ccccc",
-    width:"70%",
-    marginRight:8,
-    padding:8
-  },
+ 
   goalsContainer:{
     flex:5,
-
   }
 
 });
